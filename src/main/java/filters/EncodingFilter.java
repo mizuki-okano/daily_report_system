@@ -13,19 +13,21 @@ import javax.servlet.annotation.WebFilter;
 /**
  * Servlet Filter implementation class EncodingFilter
  */
-@WebFilter("/EncodingFilter")
+@WebFilter("/*")
 public class EncodingFilter implements Filter {
 
     /**
      * Default constructor.
      */
     public EncodingFilter() {
+
     }
 
     /**
      * @see Filter#destroy()
      */
     public void destroy() {
+
     }
 
     /**
@@ -42,6 +44,7 @@ public class EncodingFilter implements Filter {
      * @see Filter#init(FilterConfig)
      */
     public void init(FilterConfig fConfig) throws ServletException {
+
     }
 
 }
