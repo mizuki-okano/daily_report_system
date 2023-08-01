@@ -42,9 +42,19 @@ public interface JpaConst {
     String REP_COL_UPDATED_AT = "updated_at"; //更新日時
     String REP_COL_GOOD_COUNT = "good_count"; //いいね数 追記23/7/26
 
+    //いいね詳細テーブル
+    String TABLE_GOD = "goods"; //テーブル名
+    //いいね詳細テーブルカラム
+    String GOD_COL_ID = "id"; //id
+    String GOD_COL_REP = "report_id"; //日報を作成した従業員のid
+    String GOD_COL_EMP = "employee_id"; //いいねした従業員のid
+    String GOD_COL_CREATED_AT = "created_at"; //登録日時
+    String GOD_COL_UPDATED_AT = "updated_at"; //更新日時(デフォルト)
+
     //Entity名
     String ENTITY_EMP = "employee"; //従業員
     String ENTITY_REP = "report"; //日報
+    String ENTITY_GOD = "good"; //いいね
 
     //JPQL内パラメータ
     String JPQL_PARM_CODE = "code"; //社員番号
