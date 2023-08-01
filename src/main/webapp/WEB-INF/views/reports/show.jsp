@@ -6,6 +6,7 @@
 <c:set var="actRep" value="${ForwardConst.ACT_REP.getValue()}" />
 <c:set var="commIdx" value="${ForwardConst.CMD_INDEX.getValue()}" />
 <c:set var="commEdt" value="${ForwardConst.CMD_EDIT.getValue()}" />
+<c:set var="commGod" value="${ForwardConst.CMD_GOOD.getValue()}" />
 
 <c:import url="/WEB-INF/views/layout/app.jsp">
     <c:param name="content">
@@ -52,7 +53,7 @@
             </c:when>
             <c:otherwise>
                 <p>
-                    <a href="<c:url value='?action=${actRep}&command=${commGood}'></c:url>">この日報にいいねする</a>
+                    <a href="<c:url value='?action=${actRep}&command=${commGod}&id=${report.id}'></c:url>">この日報にいいねする</a>
                 </p>
             </c:otherwise>
         </c:choose>

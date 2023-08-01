@@ -237,4 +237,31 @@ public class ReportAction extends ActionBase {
             }
         }
     }
+
+    /**
+     * いいねをする
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void good() throws ServletException, IOException {
+
+        //idを条件に日報データを取得する
+        ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+
+        //いいね数を１増やす
+        int i = rv.getGoodCount();
+        i++;
+
+        rv.setGoodCount(i);
+
+        //日報データを更新する
+        service.update(rv);
+
+        //セッションに更新完了のフラッシュメッセージを設定
+        putSessionScope(AttributeConst.FLUSH, MessageConst.I_GOOD_COUNTED.getMessage());
+
+        //一覧画面にリダイレクト
+        redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
+
+    }
 }
