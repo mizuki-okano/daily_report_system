@@ -16,7 +16,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-
+/*
+ * いいねデータのDTOモデル
+ *
+ */
 @Table(name = JpaConst.TABLE_GOD)
 
 @Getter //全てのクラスフィールドについてgetterを自動生成する(Lombok)
