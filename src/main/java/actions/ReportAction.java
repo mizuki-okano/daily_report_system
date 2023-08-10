@@ -7,11 +7,13 @@ import java.util.List;
 import javax.servlet.ServletException;
 
 import actions.views.EmployeeView;
+import actions.views.GoodView;
 import actions.views.ReportView;
 import constants.AttributeConst;
 import constants.ForwardConst;
 import constants.JpaConst;
 import constants.MessageConst;
+import services.GoodService;
 import services.ReportService;
 
 /**
@@ -21,6 +23,7 @@ import services.ReportService;
 public class ReportAction extends ActionBase {
 
     private ReportService service;
+    private GoodService serviceG;
 
     /**
      * メソッドを実行する
@@ -29,10 +32,12 @@ public class ReportAction extends ActionBase {
     public void process() throws ServletException, IOException {
 
         service = new ReportService();
+        serviceG = new GoodService();
 
         //メソッドを実行
         invoke();
         service.close();
+        serviceG.close();
     }
 
     /**
@@ -247,6 +252,8 @@ public class ReportAction extends ActionBase {
 
         //idを条件に日報データを取得する
         ReportView rv = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+        //セッションからログイン中の従業員情報を取得
+        EmployeeView ev = (EmployeeView) getSessionScope(AttributeConst.LOGIN_EMP);
 
         //いいね数を１増やす
         int i = rv.getGoodCount();
@@ -257,6 +264,17 @@ public class ReportAction extends ActionBase {
         //日報データを更新する
         service.update(rv);
 
+        //パラメータの値をもとにいいね情報のインスタンスを作成する
+        GoodView gv = new GoodView(
+                null,
+                rv,
+                ev,
+                null,
+                null);
+
+        //いいねデータを登録する
+        serviceG.create(gv);
+
         //セッションに更新完了のフラッシュメッセージを設定
         putSessionScope(AttributeConst.FLUSH, MessageConst.I_GOOD_COUNTED.getMessage());
 
@@ -264,4 +282,28 @@ public class ReportAction extends ActionBase {
         redirect(ForwardConst.ACT_REP, ForwardConst.CMD_INDEX);
 
     }
+
+    /**
+     * 指定されたレポートのいいね一覧画面を表示する
+     * @throws ServletException
+     * @throws IOException
+     */
+    public void goodsIndex() throws ServletException, IOException {
+
+        //指定されたページ数の一覧画面に表示するいいねデータを取得
+        int page = getPage();
+        List<GoodView> goods = serviceG.getAllPerPage(page);
+
+        //全いいねデータの件数を取得
+        long goodsCount = serviceG.countAll();
+
+        putRequestScope(AttributeConst.REPORTS, goods); //取得した日報データ
+        putRequestScope(AttributeConst.REP_COUNT, goodsCount); //全ての日報データの件数
+        putRequestScope(AttributeConst.PAGE, page); //ページ数
+        putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
+
+        //一覧画面を表示
+        forward(ForwardConst.FW_REP_GOOD);
+    }
+
 }
