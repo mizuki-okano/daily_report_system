@@ -290,15 +290,19 @@ public class ReportAction extends ActionBase {
      */
     public void goodsIndex() throws ServletException, IOException {
 
-        //指定されたページ数の一覧画面に表示するいいねデータを取得
+        //idを条件に日報データを取得する
+        ReportView reportID = service.findOne(toNumber(getRequestParam(AttributeConst.REP_ID)));
+
+        //指定された日報にしたいいねデータを、指定されたページ数の一覧画面に表示する分取得する
         int page = getPage();
-        List<GoodView> goods = serviceG.getAllPerPage(page);
+        List<GoodView> goods = serviceG.getReportPerPage(reportID, page);
 
-        //全いいねデータの件数を取得
-        long goodsCount = serviceG.countAll();
+        //指定された日報にしたいいねデータの件数を取得
+        long goodsCount = serviceG.countGoodReport(reportID);
 
-        putRequestScope(AttributeConst.REPORTS, goods); //取得した日報データ
-        putRequestScope(AttributeConst.REP_COUNT, goodsCount); //全ての日報データの件数
+        putRequestScope(AttributeConst.REPORT, reportID); //取得した日報データ
+        putRequestScope(AttributeConst.REP_GOODS, goods); //取得したいいねデータ
+        putRequestScope(AttributeConst.REP_GOODS_COUNT, goodsCount); //指定した日報にしたいいねの数
         putRequestScope(AttributeConst.PAGE, page); //ページ数
         putRequestScope(AttributeConst.MAX_ROW, JpaConst.ROW_PER_PAGE); //1ページに表示するレコードの数
 
